@@ -441,10 +441,10 @@ if(!String.prototype.formatNum) {
 			case 'month':
 				break;
 			case 'week':
-				this._calculate_hour_minutes(data);
+				this._calculate_hour_minutes(data, 'week');
 				break;
 			case 'day':
-				this._calculate_hour_minutes(data);
+				this._calculate_hour_minutes(data, 'day');
 				break;
 		}
 
@@ -483,7 +483,7 @@ if(!String.prototype.formatNum) {
 		return this._format_hour(datetime.getHours() + ':' + datetime.getMinutes());
 	};
 
-	Calendar.prototype._calculate_hour_minutes = function(data) {
+	Calendar.prototype._calculate_hour_minutes = function(data, view) {
 		var $self = this;
 		var time_split = parseInt(this.options.time_split);
 		var time_split_count = 60 / time_split;
@@ -515,6 +515,8 @@ if(!String.prototype.formatNum) {
 			var s = new Date(parseInt(e.start));
 			var f = new Date(parseInt(e.end));
 
+            //console.dir(e);
+
 			e.start_hour = $self._format_time(s);
 			e.end_hour = $self._format_time(f);
 
@@ -523,50 +525,63 @@ if(!String.prototype.formatNum) {
 				e.start_hour = s.getDate() + ' ' + $self.locale['ms' + s.getMonth()] + ' ' + e.start_hour;
 			}
 
-			if(e.end > end.getTime()) {
-				warn(1);
+            if(e.end > end.getTime()) {
+				warn(2);
 				e.end_hour = f.getDate() + ' ' + $self.locale['ms' + f.getMonth()] + ' ' + e.end_hour;
 			}
 
 			if(e.start < start.getTime() && e.end > end.getTime()) {
+                e.all_day = true;
 				data.all_day.push(e);
-				return;
+				//return;
 			}
 
-			if(e.end < start.getTime()) {
+			if(e.start < start.getTime()) {
+                e.before_time = true;
 				data.before_time.push(e);
-				return;
+				//return;
 			}
 
-			if(e.start > end.getTime()) {
+			if(e.end > end.getTime()) {
+                e.after_time = true;
 				data.after_time.push(e);
-				return;
+				//return;
 			}
 
-			var event_start = start.getTime() - e.start;
+            if(!(e.before_time || e.after_time))
+              e.by_hour = true;
 
-			if(event_start >= 0) {
-				e.top = 0;
-			} else {
-				e.top = Math.abs(event_start) / ms_per_line;
-			}
+            if(view == 'day') {
 
-			var lines_left = Math.abs(lines - e.top);
-			var lines_in_event = (e.end - e.start) / ms_per_line;
-			if(event_start >= 0) {
-				lines_in_event = (e.end - start.getTime()) / ms_per_line;
-			}
+                var draw_start = Math.max(start.getTime(), e.start);
+                var draw_end = Math.min(end.getTime(), e.end);
 
-			e.lines = lines_in_event;
-			if(lines_in_event > lines_left) {
-				e.lines = lines_left;
-			}
+                var event_start = start.getTime() - e.start;
+                if (event_start >= 0) {
+                    e.top = 0;
+                    e.left = 0;
+                }
+                else {
+                    e.top = Math.abs(event_start) / ms_per_line;
+                    e.left = (draw_start - start.getTime()) / 86400000.0 * 100.0; // ms / day
+                }
+
+                var lines_left = Math.abs(lines - e.top);
+                var lines_in_event = (e.end - e.start) / ms_per_line;
+                if (event_start >= 0) {
+                    lines_in_event = (e.end - start.getTime()) / ms_per_line;
+                }
+                e.width = Math.max((draw_end - draw_start) / 86400000.0 * 100.0, 1.0/24.0 * 100.0);
+                e.lines = lines_in_event;
+
+                if (lines_in_event > lines_left) {
+                    e.lines = lines_left;
+                }
+            }
 
 			data.by_hour.push(e);
 		});
 
-		//var d = new Date('2013-03-14 13:20:00');
-		//warn(d.getTime());
 	};
 
 	Calendar.prototype._hour_min = function(hour) {

@@ -119,7 +119,9 @@
   min-height: auto;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: #eeeeee;
 }
+
 .cal-events-num {
   margin-top: 20px;
 }
@@ -208,12 +210,12 @@
 }
 .cal-week-box [data-event-class] {
   white-space: nowrap;
-  height: 30px;
-  margin: 1px 1px;
-  line-height: 30px;
+  /*height: 30px;*/
+  margin: 2px 2px;
+  /*line-height: 30px;*/
   text-overflow: ellipsis;
   overflow: hidden;
-  padding-left: 10px;
+  padding: 2px 4px 2px 4px;
 }
 .cal-week-box .cal-column {
   position: absolute;
@@ -317,9 +319,9 @@
   height: 12px;
   margin-right: 2px;
   margin-bottom: 2px;
-  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
-  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
-  border-radius: 8px;
+  /*-webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);*/
+  /*box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);*/
+  /*border-radius: 8px;*/
   border: 1px solid #ffffff;
 }
 .event-block {
@@ -450,10 +452,11 @@ span[data-cal-date]:hover {
   cursor: default;
 }
 .cal-day-today {
-  background-color: #e8fde7;
+  /*background-color: #e8fde7;*/
 }
 .cal-day-today span[data-cal-date] {
   color: darkgreen;
+  font-weight: bold;
 }
 .cal-month-box .cal-day-today span[data-cal-date] {
   font-size: 1.9em;
@@ -483,19 +486,20 @@ span[data-cal-date]:hover {
 }
 #cal-slide-content {
   padding: 20px;
-  color: #ffffff;
-  background-image: url("../img/dark_wood.png");
+  color: black;
+    background-color: #eeeeee;
+  /*background-image: url("../img/dark_wood.png");
   -webkit-box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);*/
 }
 #cal-slide-tick {
   background-image: url("../img/tick.png?2");
 }
 #cal-slide-content:hover {
-  background-color: transparent;
+  /*background-color: transparent;*/
 }
 #cal-slide-content a.event-item {
-  color: #ffffff;
+  color: #333333;
   font-weight: normal;
   line-height: 22px;
 }
@@ -512,4 +516,90 @@ a.cal-event-week {
 }
 .badge-important {
   background-color: #b94a48;
+}
+
+/* New classes */
+
+.hour-text {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    font-size: 12px;
+    width: 40px;
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.hour-row {
+    position:relative;
+}
+
+.hour-block {
+    display: inline-block;
+    min-width: 4.166%;
+    max-width: 4.166%;
+    padding: 6px 0px 6px 0px;
+    border-left: 1px solid #eeeeee;
+}
+
+.row:nth-child(2) div.hour-row {
+  border-top: 1px solid #eeeeee;
+}
+
+.row:last-child div.hour-row {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.hour-block:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.hour-block:nth-child(odd) {
+    background: none;
+}
+
+.hour-block:last-child {
+    border-right: 1px solid #eeeeee;
+}
+
+.event-bar {
+    position:absolute;
+    z-index: 1;
+    top: 5px;
+    padding: 2px 4px 2px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*font-size: 12px;*/
+    padding-left: 4px;
+}
+
+.hr-event-important {
+    background-color: #fae3e3;
+    border: 1px solid #ff3333;
+}
+.hr-event-warning {
+    background-color: #fdf1ba;
+    border: 1px solid #ffff33;
+}
+.hr-event-info {
+    background-color: #d1e8ff;
+    border: 1px solid #3333ff;
+}
+.hr-event-inverse {
+    background-color: #c1c1c1;
+    border: 1px solid #999999;
+}
+.hr-event-success {
+    background-color: #caffca;
+    border: 1px solid #33ff33;
+}
+.hr-event-special {
+    background-color: #ffe6ff;
+    border: 1px solid #ff33ff;
 }
